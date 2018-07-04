@@ -1,0 +1,184 @@
+---
+layout:     post
+title:      "Welcome to Anderson7 Blog"
+subtitle:   " \"Hello World, Hello Blog\""
+date:       2018-06-27 12:00:00
+author:     "李少博"
+header-img: "img/post-bg-2015.jpg"
+tags:
+    - JDBC
+---
+> “Yeah It's on. ”
+> 
+# JDBC
+
+## 数据持久化
+
+- 持久化：把数据保存到可掉电式存储设备中供以后使用。大多数情况下，特别是企业级应用，数据持久化意味着将内存保存到硬盘上加以固话，持久化通过关系数据库来完成。
+- 持久化的主要应用是将内存中的数据存储在关系数据库中，当然也可以存储在磁盘文件，XML文件中。
+
+## java中的数据存储技术
+
+- 分为这几类：
+  - JDBC直接访问数据库
+  - JDO
+  - 第三方O/R工具，Hibernate，ibatis等
+- JDBC是java访问数据库的基石，JDO,hibernate等是未来更好的封装JDBC。
+
+## JDBC基础
+
+- JDBC(java Database Connectivity)是一个独立于特定数据库管理系统，通过SQL数据库存取和操作的公共接口（API），定义了用来访问数据库的标准Java类库，使用这个类库可以以一种标准的方法、方便的访问数据库资源。
+- JDBC为访问不同的数据库提供了一种统一的途径，为开发者屏蔽了一些细节问题。
+- JDBC的目标是使Java程序员使用JDBC可以连接任何提供了JDBC驱动的数据库系统，这样就使得程序员无需对特定的数据库系统的特点有过多的了解，从而大大简化和加快开发过程。
+
+![](C:\Users\29084\Desktop\Andersen博客\JDBC.png)
+
+## 连接数据库方法：
+
+```java
+public class TransactionTest {
+    public static Connection getConnection() {
+        Connection conn = null;
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/jsp_db", "root", "123000");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return conn;
+    }  
+```
+
+## Statement 
+
+##### 调用 Statement 的 executeUpdate(sql) 来进行 SQL 语句的插入
+
+```java
+public static void insertUserData(Connection conn) throws SQLException {
+    
+        String sql = "INSERT INTO tbl_user(id, name, password, email) " +
+                "VALUES(10, 'TOM', '123456', 'tom1@qq.com')";
+        Statement st = conn.createStatement();
+        int count = st.executeUpdate(sql);
+        System.out.println("向用户表中插入了" + count + "条数据");
+    }
+```
+
+## DAO
+
+DAO: Date Access Object 数据访问对象
+
+why：实现功能的模块化，有利于代码的维护和升级
+
+what：访问数据信息的类，包含对数据的CRUD，而不包含任何业务相关的信息
+
+how：使用JDBC 编写 DAO 可能会包含的方法：
+
+
+
+#### eitity层
+
+User：
+
+```java
+
+```
+
+idEntity:
+
+```java
+package com.jike.entity;
+
+public abstract class IdEntity {
+    protected Long id;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id){
+        this.id = id;
+    }
+}
+
+```
+
+Address:
+
+```java
+package com.jike.entity;
+
+public class Address extends IdEntity{
+    private String city;
+    private String country;
+    private String userId;
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    @Override
+    public String toString() {
+        return "Address{" +
+                "city='" + city + '\'' +
+                ", country='" + country + '\'' +
+                ", userId='" + userId + '\'' +
+                ", id=" + id +
+                '}';
+    }
+}
+
+```
+
+#### dao层
+
+UserDao
+
+```java
+//定义接口
+public interface UserDao {
+
+    public  void  save(Connection conn, User user) throws SQLException;
+
+    public  void  update(Connection conn, Long id, User user) throws SQLException;
+
+    public  void delete(Connection conn, User user) throws SQLException;
+
+}
+```
+
+UserDaoImpl：
+
+```java
+
+```
+
+#### test
+
+UserDaoTest：
+
+```java
+
+```
+
